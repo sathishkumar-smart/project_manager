@@ -1,0 +1,5 @@
+[2025-08-16 11:23:00,177] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.2934s", "body": "unreadable"}
+[2025-08-16 11:32:50,550] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.1816s", "body": "unreadable"}
+[2025-08-16 11:33:55,512] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.1539s", "body": "unreadable"}
+[2025-08-16 11:49:11,982] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.1964s", "body": "unreadable"}
+[2025-08-16 11:52:42,180] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 500, "duration": "0.1559s", "body": "unreadable"}
