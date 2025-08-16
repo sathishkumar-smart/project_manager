@@ -1,115 +1,248 @@
-from rest_framework import viewsets, permissions,filters
-from .models import Project,ProjectMember,Task,TaskComment,TaskAttachment
-from notifications.models import Notification
-from .serializers import ProjectSerializer,TaskSerializer,TaskCommentSerializer,ProjectMemberSerializer,TaskAttachmentSerializer
-from .permissions import IsOwnerOrReadOnly,IsAssignedOrOwner,IsProjectMember
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.exceptions import PermissionDenied,APIException
-from config.exceptions import InvalidTaskStatus
-from config.utils.logger import custom_log
+"""
+views.py
+
+This module defines DRF ViewSets for handling project management operations.
+Each ViewSet is responsible only for request/response handling and delegates
+the core business logic to the corresponding service layer (ProjectService,
+TaskService, etc.), ensuring a clean separation of concerns.
+
+ViewSets included:
+- ProjectViewSet        : CRUD operations for projects.
+- TaskViewSet           : CRUD operations for tasks within projects.
+- TaskCommentViewSet    : Managing comments on tasks.
+- ProjectMemberViewSet  : Managing project members.
+- TaskAttachmentViewSet : Managing file attachments for tasks.
+"""
+
+from rest_framework import viewsets, permissions, filters
+from .serializers import (
+    ProjectSerializer, TaskSerializer, TaskCommentSerializer,
+    ProjectMemberSerializer, TaskAttachmentSerializer
+)
+from .permissions import IsProjectMember
+
+# Services (business logic layer)
+from .services.project_service import ProjectService
+from .services.task_service import TaskService
+from .services.attachment_service import AttachmentService
+from .services.member_service import MemberService
+from .services.comment_service import CommentService
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing projects.
+
+    Features:
+        - Authenticated users only.
+        - Supports listing, creating, updating, and deleting projects.
+        - Delegates logic to `ProjectService`.
+
+    Endpoints:
+        - GET    /projects/           → List user’s projects
+        - POST   /projects/           → Create a new project
+        - GET    /projects/{id}/      → Retrieve a project
+        - PUT    /projects/{id}/      → Update an existing project
+        - DELETE /projects/{id}/      → Delete a project
+    """
+
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.IsAuthenticated,IsOwnerOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return Project.objects.filter(owner=self.request.user)
+        """
+        Fetch projects belonging to the authenticated user.
+
+        Returns:
+            QuerySet: List of `Project` instances owned by the current user.
+        """
+        return ProjectService.list_user_projects(self.request.user)
 
     def perform_create(self, serializer):
-        project = serializer.save(owner=self.request.user)
-        a=1/0
-        ProjectMember.objects.create(project=project, user=self.request.user, role='owner')
+        """
+        Create a new project using ProjectService.
+
+        Args:
+            serializer (ProjectSerializer): Validated project data.
+        """
+        ProjectService.create_project(serializer, self.request.user)
+
+    def perform_update(self, serializer):
+        """
+        Update an existing project using ProjectService.
+
+        Args:
+            serializer (ProjectSerializer): Validated project data with updates.
+        """
+        ProjectService.update_project(serializer, serializer.instance)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    """
+    API endpoint for managing tasks within projects.
+
+    Features:
+        - Restricted to authenticated users who are project members.
+        - Supports filtering, searching, and ordering.
+        - Delegates logic to `TaskService`.
+
+    Endpoints:
+        - GET    /projects/{project_id}/tasks/         → List tasks
+        - POST   /projects/{project_id}/tasks/         → Create a new task
+        - GET    /projects/{project_id}/tasks/{id}/    → Retrieve a task
+        - PUT    /projects/{project_id}/tasks/{id}/    → Update a task
+        - DELETE /projects/{project_id}/tasks/{id}/    → Delete a task
+    """
+
     serializer_class = TaskSerializer
-    permission_classes = [permissions.IsAuthenticated,IsProjectMember]
-    
+    permission_classes = [permissions.IsAuthenticated, IsProjectMember]
+    queryset = TaskService  # Service handles actual queries
+
+    # Enable filtering, searching, and ordering
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['title', 'description','assigned_to__email', 'assigned_to__username']
-    ordering_fields = ['priority', 'due_date', 'created_at']  # allowed ordering
-    ordering = ['-priority']  # default ordering
+    search_fields = ["title", "description", "assigned_to__email", "assigned_to__username"]
+    ordering_fields = ["priority", "due_date", "created_at"]
+    ordering = ["-priority"]
 
     def perform_create(self, serializer):
-        assigned_user = serializer.validated_data.get('assigned_to', None)
-        if not assigned_user:
-            assigned_user = self.request.user
-        try:
-            task=serializer.save(assigned_to=assigned_user,created_by=self.request.user)
-            if task.assigned_to:
-                Notification.objects.create(
-                    recipient=task.assigned_to,
-                    message=f"You have been assigned to task '{task.title}'"
-                )
-        except Exception as e:
-            custom_log(f"Error: {str(e)}", file_path="task/comment/update.log", level="error")
-            raise APIException("Failed to create task. Please try again.")
-            
+        """
+        Create a new task using TaskService.
+
+        Args:
+            serializer (TaskSerializer): Validated task data.
+        """
+        TaskService.create_task(serializer, self.request)
+
     def perform_update(self, serializer):
-        assigned_to = self.request.data.get("assigned_to")
-        status_value=self.request.get("status")
-        if status_value not in ['todo','in_progress','completed']:
-            raise InvalidTaskStatus()
-        if assigned_to and not self.request.user.is_staff:
-            raise PermissionDenied("You can't reassign tasks to others.")
-        serializer.save()
+        """
+        Update an existing task using TaskService.
+
+        Args:
+            serializer (TaskSerializer): Validated task data with updates.
+        """
+        TaskService.update_task(serializer, self.request)
+
 
 class TaskCommentViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing comments on tasks.
+
+    Features:
+        - Only authenticated users can create and view comments.
+        - Delegates logic to `CommentService`.
+
+    Endpoints:
+        - GET    /tasks/{task_id}/comments/        → List comments for a task
+        - POST   /tasks/{task_id}/comments/        → Add a comment
+        - GET    /tasks/{task_id}/comments/{id}/   → Retrieve a comment
+        - PUT    /tasks/{task_id}/comments/{id}/   → Update a comment
+        - DELETE /tasks/{task_id}/comments/{id}/   → Delete a comment
+    """
+
     serializer_class = TaskCommentSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter,IsProjectMember]
-    search_fields = ['author__username', 'content']
-    ordering_fields = ['created_at']
-    ordering = ['-created_at']
 
     def get_queryset(self):
-        return TaskComment.objects.filter(
-            task_id=self.kwargs['task_pk'],
-            task__project__owner=self.request.user
-        )
+        """
+        Fetch comments for a given task.
+
+        Args:
+            task_pk (int): Task ID from URL.
+
+        Returns:
+            QuerySet: List of `TaskComment` instances.
+        """
+        return CommentService.list_comments(self.request.user, self.kwargs["task_pk"])
 
     def perform_create(self, serializer):
-        comment=serializer.save(
-            task_id=self.kwargs['task_pk'],
-            author=self.request.user
-        )
+        """
+        Create a new comment using CommentService.
 
-        recipients = set()
+        Args:
+            serializer (TaskCommentSerializer): Validated comment data.
+        """
+        CommentService.create_comment(serializer, self.kwargs["task_pk"], self.request.user)
 
-        # Notify task owner
-        if comment.task.created_by != self.request.user:
-           recipients.add(comment.task.created_by)
 
-        # Notify assignee
-        if comment.task.assigned_to and comment.task.assigned_to != self.request.user:
-            recipients.add(comment.task.assigned_to)
-
-        for user in recipients:
-            Notification.objects.create(
-                recipient=user,
-                message=f"New comment on task '{comment.task.title}'"
-            )
-            
 class ProjectMemberViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing project members.
+
+    Features:
+        - Authenticated users only.
+        - Allows adding/listing members of a project.
+        - Delegates logic to `MemberService`.
+
+    Endpoints:
+        - GET    /projects/{project_id}/members/        → List project members
+        - POST   /projects/{project_id}/members/        → Add a member
+        - GET    /projects/{project_id}/members/{id}/   → Retrieve a member
+        - PUT    /projects/{project_id}/members/{id}/   → Update a member
+        - DELETE /projects/{project_id}/members/{id}/   → Remove a member
+    """
+
     serializer_class = ProjectMemberSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        project_id = self.kwargs['project_pk']
-        return ProjectMember.objects.filter(project_id=project_id)
+        """
+        Fetch members for a given project.
+
+        Args:
+            project_pk (int): Project ID from URL.
+
+        Returns:
+            QuerySet: List of `ProjectMember` instances.
+        """
+        return MemberService.list_members(self.kwargs["project_pk"])
 
     def perform_create(self, serializer):
-        project = Project.objects.get(pk=self.kwargs['project_pk'])
-        serializer.save(project=project)
+        """
+        Add a new member to a project using MemberService.
+
+        Args:
+            serializer (ProjectMemberSerializer): Validated member data.
+        """
+        MemberService.add_member(serializer, self.kwargs["project_pk"])
+
 
 class TaskAttachmentViewSet(viewsets.ModelViewSet):
-    queryset = TaskAttachment.objects.all()
+    """
+    API endpoint for managing task attachments.
+
+    Features:
+        - Handles file uploads and retrieval of attachments.
+        - Authenticated users only.
+        - Delegates logic to `AttachmentService`.
+
+    Endpoints:
+        - GET    /tasks/{task_id}/attachments/        → List attachments for a task
+        - POST   /tasks/{task_id}/attachments/        → Upload a new attachment
+        - GET    /tasks/{task_id}/attachments/{id}/   → Retrieve an attachment
+        - PUT    /tasks/{task_id}/attachments/{id}/   → Update an attachment
+        - DELETE /tasks/{task_id}/attachments/{id}/   → Delete an attachment
+    """
+
     serializer_class = TaskAttachmentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return TaskAttachment.objects.filter(task__project__owner=self.request.user)
+        """
+        Fetch attachments for a given task.
+
+        Args:
+            task_pk (int): Task ID from URL.
+
+        Returns:
+            QuerySet: List of `TaskAttachment` instances.
+        """
+        return AttachmentService.list_attachments(self.request.user, self.kwargs["task_pk"])
 
     def perform_create(self, serializer):
-        serializer.save()
+        """
+        Create a new attachment using AttachmentService.
+
+        Args:
+            serializer (TaskAttachmentSerializer): Validated attachment data.
+        """
+        AttachmentService.create_attachment(serializer, self.kwargs["task_pk"], self.request.user)

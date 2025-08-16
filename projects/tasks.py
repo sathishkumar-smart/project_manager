@@ -1,15 +1,26 @@
 from celery import shared_task
-import time
-import logging
+from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 
-logger = logging.getLogger("django")
+User = get_user_model()
 
-@shared_task(bind=True, max_retries=3)
-def send_task_notification(self, task_id, user_email):
-    try:
-        time.sleep(3)  # simulate heavy work
-        logger.info(f"📩 Notification sent for Task {task_id} to {user_email}")
-        return f"Notification sent to {user_email}"
-    except Exception as e:
-        logger.error(f"Task notification failed: {str(e)}")
-        raise self.retry(exc=e, countdown=5)  # retry after 5s
+@shared_task
+def send_task_assignment_email(task_id, assigned_user_email):
+    send_mail(
+        subject='New Task Assigned',
+        message=f'You have been assigned to task ID {task_id}',
+        from_email='no-reply@projectmanager.com',
+        recipient_list=[assigned_user_email],
+        fail_silently=False,
+    )
+
+@shared_task
+def send_daily_summary_email():
+    users = User.objects.all()
+    for user in users:
+        send_mail(
+            subject="Daily Summary",
+            message="Here is your daily summary of tasks.",
+            from_email="noreply@projectmanager.com",
+            recipient_list=[user.email],
+        )

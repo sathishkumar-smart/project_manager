@@ -3,3 +3,46 @@
 [2025-08-16 11:33:55,512] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.1539s", "body": "unreadable"}
 [2025-08-16 11:49:11,982] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.1964s", "body": "unreadable"}
 [2025-08-16 11:52:42,180] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 500, "duration": "0.1559s", "body": "unreadable"}
+[2025-08-16 09:57:56,481] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/login/", "status": 200, "duration": "0.7457s", "body": "unreadable"}
+[2025-08-16 09:58:29,281] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 500, "duration": "0.0761s", "body": "unreadable"}
+[2025-08-16 09:59:00,907] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.0633s", "body": "unreadable"}
+[2025-08-16 09:59:13,376] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/projects/", "status": 200, "duration": "0.056s"}
+[2025-08-16 09:59:28,915] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/", "status": 400, "duration": "0.05s", "body": "unreadable"}
+[2025-08-16 09:59:48,428] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/register/", "status": 401, "duration": "0.0038s", "body": {"email": "sathishuser1@gmail.com", "password": "12345678", "name": "sathish user"}}
+[2025-08-16 10:00:06,385] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/register/", "status": 401, "duration": "0.0011s", "body": {"email": "sathishuser1@gmail.com", "password": "12345678", "name": "sathish user"}}
+[2025-08-16 10:43:03,628] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/register/", "status": 401, "duration": "0.0083s", "body": {"email": "sathishuser1@gmail.com", "password": "12345678", "name": "sathish user"}}
+[2025-08-16 10:43:06,796] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/register/", "status": 401, "duration": "0.0012s", "body": {"email": "sathishuser1@gmail.com", "password": "12345678", "name": "sathish user"}}
+[2025-08-16 10:44:35,018] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/register/", "status": 201, "duration": "0.8033s", "body": "unreadable"}
+[2025-08-16 10:45:26,597] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/", "status": 201, "duration": "0.1005s", "body": "unreadable"}
+[2025-08-16 10:45:45,756] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/5/comments/", "status": 400, "duration": "0.0438s", "body": "unreadable"}
+[2025-08-16 10:45:53,419] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/5/comments/", "status": 500, "duration": "0.0634s", "body": "unreadable"}
+[2025-08-16 10:46:12,199] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/1/comments/", "status": 201, "duration": "0.0884s", "body": "unreadable"}
+[2025-08-16 11:05:32,093] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/", "status": 404, "duration": "0.0356s"}
+[2025-08-16 11:06:24,985] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/", "status": 201, "duration": "0.2918s", "body": "unreadable"}
+[2025-08-16 11:11:46,818] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/tasks/", "status": 201, "duration": "0.4967s", "body": "unreadable"}
+[2025-08-16 14:17:58,798] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/5/comments/", "status": 500, "duration": "0.0756s"}
+[2025-08-16 14:18:34,424] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/5/comments/", "status": 200, "duration": "0.0744s"}
+[2025-08-16 14:18:42,250] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0657s"}
+[2025-08-16 18:01:39,803] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0801s"}
+[2025-08-16 18:03:04,339] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0647s"}
+[2025-08-16 18:03:09,152] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0519s"}
+[2025-08-16 18:04:09,986] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0583s"}
+[2025-08-16 18:05:13,167] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0605s"}
+[2025-08-16 18:05:18,759] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0684s"}
+[2025-08-16 18:10:11,825] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 500, "duration": "0.0594s"}
+[2025-08-16 18:14:12,374] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.9145s"}
+[2025-08-16 18:16:06,565] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "1.1085s"}
+[2025-08-16 18:21:19,573] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.6738s"}
+[2025-08-16 18:21:25,063] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.5505s"}
+[2025-08-16 18:21:39,910] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.0472s"}
+[2025-08-16 18:21:57,841] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "0.558s"}
+[2025-08-16 18:22:49,723] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "1.6508s"}
+[2025-08-16 18:33:33,375] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "1.8877s"}
+[2025-08-16 20:44:16,100] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "GET", "path": "/api/tasks/1/comments/", "status": 200, "duration": "1.0676s"}
+[2025-08-16 20:44:36,009] INFO api_logger - {"user": "lingampellisathishkumar@gmail.com", "method": "POST", "path": "/api/projects/", "status": 201, "duration": "0.0696s", "body": "unreadable"}
+[2025-08-16 21:22:16,480] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/swagger", "status": 404, "duration": "0.0437s"}
+[2025-08-16 21:22:16,698] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/swagger/", "status": 500, "duration": "0.1538s"}
+[2025-08-16 21:22:17,148] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/favicon.ico", "status": 404, "duration": "0.0232s"}
+[2025-08-16 21:35:25,118] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/api/docs", "status": 404, "duration": "0.0295s"}
+[2025-08-16 21:35:25,244] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/api/docs/", "status": 200, "duration": "0.0398s"}
+[2025-08-16 21:35:27,435] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/api/schema/", "status": 200, "duration": "0.1355s"}

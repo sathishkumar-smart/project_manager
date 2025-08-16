@@ -1,2 +1,48 @@
 [2025-08-16 11:52:42,187] ERROR django.request - Internal Server Error: /api/projects/
 [2025-08-16 11:52:42,189] ERROR django.server - "POST /api/projects/ HTTP/1.1" 500 83
+[2025-08-16 09:56:31,468] ERROR django.security.DisallowedHost - Invalid HTTP_HOST header: '0.0.0.0:8000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '0.0.0.0:8000'. You may need to add '0.0.0.0' to ALLOWED_HOSTS.
+[2025-08-16 09:58:29,288] ERROR django.request - Internal Server Error: /api/projects/
+[2025-08-16 09:58:29,291] ERROR django.server - "POST /api/projects/ HTTP/1.1" 500 83
+[2025-08-16 10:45:53,426] ERROR django.request - Internal Server Error: /api/tasks/5/comments/
+[2025-08-16 10:45:53,429] ERROR django.server - "POST /api/tasks/5/comments/ HTTP/1.1" 500 279
+[2025-08-16 14:17:58,829] ERROR django.request - Internal Server Error: /api/tasks/5/comments/
+[2025-08-16 14:17:58,831] ERROR django.server - "GET /api/tasks/5/comments/ HTTP/1.1" 500 123
+[2025-08-16 18:10:11,834] ERROR django.request - Internal Server Error: /api/tasks/1/comments/
+[2025-08-16 18:10:11,836] ERROR django.server - "GET /api/tasks/1/comments/ HTTP/1.1" 500 147
+[2025-08-16 21:22:16,693] ERROR django.request - Internal Server Error: /swagger/
+Traceback (most recent call last):
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/rest_framework/response.py", line 74, in rendered_content
+    ret = renderer.render(self.data, accepted_media_type, context)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/drf_yasg/renderers.py", line 79, in render
+    return render_to_string(self.template, renderer_context, renderer_context['request'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sathishkumar/projects/project_manager/venv/lib/python3.12/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: drf-yasg/swagger-ui.html
+[2025-08-16 21:22:16,747] ERROR django.server - "GET /swagger/ HTTP/1.1" 500 100531
