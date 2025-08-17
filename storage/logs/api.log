@@ -46,3 +46,4 @@
 [2025-08-16 21:35:25,118] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/api/docs", "status": 404, "duration": "0.0295s"}
 [2025-08-16 21:35:25,244] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/api/docs/", "status": 200, "duration": "0.0398s"}
 [2025-08-16 21:35:27,435] INFO api_logger - {"user": "Anonymous", "method": "GET", "path": "/api/schema/", "status": 200, "duration": "0.1355s"}
+[2025-08-17 08:26:22,212] INFO api_logger - {"user": "Anonymous", "method": "POST", "path": "/api/accounts/register/", "status": 201, "duration": "0.6565s", "body": "unreadable"}
