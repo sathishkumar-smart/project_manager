@@ -1,12 +1,18 @@
 from rest_framework import serializers
-from .models import User
-from django.contrib.auth import authenticate
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
+
+# Get the active User model
+User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for user registration.
+    Maps API 'name' field to model's 'full_name' field.
+    Handles password validation and user creation.
+    """
     name = serializers.CharField(
-        source="full_name",  # maps the API field 'name' to model field 'full_name'
+        source="full_name",  # Maps the API field 'name' to model field 'full_name'
         required=True,
         error_messages={
             'required': 'Name is required.',
@@ -26,16 +32,25 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['email', 'password', 'name']
 
     def validate_email(self, value):
+        """
+        Check if the email is already registered.
+        """
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Email is already taken.")
         return value
 
     def create(self, validated_data):
+        """
+        Create a new user using `create_user` to handle hashing password.
+        """
         return User.objects.create_user(**validated_data)
 
-User = get_user_model()
 
 class EmailAuthTokenSerializer(serializers.Serializer):
+    """
+    Serializer for email-based authentication.
+    Validates email and password and returns the authenticated user.
+    """
     email = serializers.EmailField()
     password = serializers.CharField(
         label="Password",
@@ -44,16 +59,22 @@ class EmailAuthTokenSerializer(serializers.Serializer):
     )
 
     def validate(self, attrs):
+        """
+        Authenticate the user using provided email and password.
+        """
         email = attrs.get('email')
         password = attrs.get('password')
 
         if email and password:
-            user = authenticate(request=self.context.get('request'),
-                                email=email, password=password)
+            user = authenticate(
+                request=self.context.get('request'),
+                email=email,
+                password=password
+            )
             if not user:
                 raise serializers.ValidationError("Invalid email or password.")
         else:
             raise serializers.ValidationError("Must include 'email' and 'password'.")
-        
+
         attrs['user'] = user
         return attrs
